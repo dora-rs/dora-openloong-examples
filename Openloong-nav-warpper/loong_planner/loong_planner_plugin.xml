@@ -1,0 +1,7 @@
+<library path="lib/libloong_planner">
+ <class name="loong_planner/LoongPlanner" type="loong_planner::LoongPlanner" base_class_type="nav_core::BaseLocalPlanner">
+  <description>
+	 Loong Planner
+  </description>
+ </class>
+</library>

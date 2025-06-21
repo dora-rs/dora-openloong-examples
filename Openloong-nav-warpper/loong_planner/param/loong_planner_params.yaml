@@ -1,0 +1,22 @@
+  # 最大x线速度（单位：米/秒）
+  max_linear_velocity_x: 0.6
+  # 最大y线速度（单位：米/秒）
+  max_linear_velocity_y: 0.3
+
+  # 最大角速度（单位：弧度/秒）
+  max_angular_velocity: 0.4
+
+  # x线速度权重（用于速度计算的权重因子）
+  linear_velocity_weight_x: 1.6
+
+  # y线速度权重（用于速度计算的权重因子）
+  linear_velocity_weight_y: 0.3
+
+  # 角速度权重（用于角速度计算的权重因子）
+  angular_velocity_weight: 0.5
+
+  #路径跟随距离，会影响速度
+  path_follow: 0.75
+
+  #终点距离判断
+  final_dist: 0.5
