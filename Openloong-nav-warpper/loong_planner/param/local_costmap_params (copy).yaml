@@ -1,0 +1,10 @@
+local_costmap:
+  global_frame: robot_foot_init
+  robot_base_frame: body_foot
+  static_map: false
+  rolling_window: true
+  width: 4.0
+  height: 4.0
+  update_frequency: 10.0
+  publish_frequency: 10.0
+  transform_tolerance: 1.0
