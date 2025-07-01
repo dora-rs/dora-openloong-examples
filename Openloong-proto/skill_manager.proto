@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package skill_manager;
+
+message Action {
+    string file = 1;
+    int32 fps = 2;
+    int32 timeout_ms = 3;
+}
+
+message Audio {
+    string file = 1;
+    int32 timeout_ms = 2;
+}
+
+message Response {
+    bool succeeded = 1;
+    string msg = 2;
+}
+
+message ActionResponse {
+    bool succeeded = 1;
+    string msg = 2;
+    int32 precentage = 3;
+}
+
+service SkillManager {
+    rpc startAction(Action) returns (stream ActionResponse);
+    rpc stopAction(Action) returns (Response);
+    rpc playAudio(Audio) returns (Response);
+    rpc stopAudio(Audio) returns (Response);
+}
