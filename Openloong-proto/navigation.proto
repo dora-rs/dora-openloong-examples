@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package navigation;
+
+import "google/protobuf/empty.proto";
+
+message Descartes {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+message Euler {
+    float roll = 1;
+    float pitch = 2;
+    float yaw = 3;
+}
+
+message Pose {
+    Descartes position = 1;
+    Euler attitude = 2;
+}
+
+message State {
+    Descartes position = 1;
+    Descartes velocity = 2;
+    Euler attitude = 3;
+}
+
+message Response {
+    bool succeeded = 1;
+    string msg = 2;
+}
+
+message NaviResponse {
+    bool succeeded = 1;
+    string msg = 2;
+    bool arrived = 3;
+    State state = 4;
+}
+
+message Config {
+    bool relative = 1;
+}
+
+message Map {
+    Descartes origin = 1;
+    float resolution = 2;
+    float occupied_threshold = 3;
+    float free_threshold = 4;
+    bytes pgm = 5;
+}
+
+service NaviController {
+    rpc setDestination(Pose) returns (Response);
+    rpc startNavi(Config) returns (stream NaviResponse);
+    rpc stopNavi(google.protobuf.Empty) returns (Response);
+    rpc getState(google.protobuf.Empty) returns (State);
+}
+
+service MapManager {
+    rpc getMap(google.protobuf.Empty) returns (Map);
+}
