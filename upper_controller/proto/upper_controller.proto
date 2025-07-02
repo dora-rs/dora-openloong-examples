@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package upper_controller;
+
+import "google/protobuf/empty.proto";
+
+message EffectorPosition {
+    repeated float left = 1;
+    repeated float right = 2;
+}
+
+message EndPose {
+    repeated float left = 1;
+    repeated float right = 2;
+}
+
+message ArmPosition {
+    repeated float left = 1;
+    repeated float right = 2;
+}
+
+message NeckPose {
+    repeated float neck = 1;
+}
+
+message WaistPose {
+    repeated float waist = 1;
+}
+
+message EndPayload {
+    EndPose end = 1;
+    EffectorPosition effector = 2;
+}
+
+message ArmPayload {
+    ArmPosition arm = 1;
+    EffectorPosition effector = 2;
+}
+
+message Response {
+    bool succeeded = 1;
+    string msg = 2;
+}
+
+message Config {
+    int32 incharge = 1;
+    int32 filter_level = 2;
+    int32 arm_mode = 3;
+    int32 digit_mode = 4;
+    int32 neck_mode = 5;
+    int32 waist_mode = 6;
+}
+
+service UpperController {
+    rpc sendEndAction(EndPayload) returns (Response);
+    rpc recvEndState(google.protobuf.Empty) returns (EndPayload);
+    rpc sendArmAction(ArmPayload) returns (Response);
+    rpc recvArmState(google.protobuf.Empty) returns (ArmPayload);
+    rpc setConfig(Config) returns (Response);
+    rpc getConfig(google.protobuf.Empty) returns (Config);
+    rpc setNeckPose(NeckPose) returns (Response);
+    rpc getNeckPose(google.protobuf.Empty) returns (NeckPose);
+    rpc setWaistPose(WaistPose) returns (Response);
+    rpc getWaistPose(google.protobuf.Empty) returns (WaistPose);
+}
