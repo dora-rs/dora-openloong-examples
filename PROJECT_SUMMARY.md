@@ -26,3 +26,4 @@
     There were tests whose specified size is too big. Use the --test_verbose_timeout_warnings command line option to see which ones these are.
     ```
     推测是因为拉取子模块超时导致的失败;
+#### 7月6日: 在macOS环境中使用发行版gRPC构建样例: 使用Dora封装client工作流
