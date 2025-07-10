@@ -1,0 +1,21 @@
+nodes:
+  - id: start_trigger
+    custom:
+      source: start_workflow.py
+    outputs:
+      - start_trigger
+
+  - id: robot_workflow
+    custom:
+      source: robot_workflow.py
+    inputs:
+      start_trigger: start_trigger
+      next_action: next_action
+    outputs:
+      - chassis_command
+      - arm_command
+      - workflow_status
+
+edges:
+  - from: start_trigger
+    to: robot_workflow
