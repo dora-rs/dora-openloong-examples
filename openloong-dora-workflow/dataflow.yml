@@ -1,13 +1,11 @@
 nodes:
   - id: start_trigger
-    custom:
-      source: start_workflow.py
+    path: start_workflow.py
     outputs:
       - start_trigger
 
   - id: robot_workflow
-    custom:
-      source: robot_workflow.py
+    path: robot_workflow.py
     inputs:
       start_trigger: start_trigger
       next_action: next_action
@@ -17,24 +15,21 @@ nodes:
       - workflow_status
 
   - id: chassis_controller
-    custom:
-      source: chassis_controller_client.py
+    path: chassis_controller_client.py
     inputs:
       chassis_command: chassis_command
     outputs:
       - chassis_status
 
   - id: upper_controller
-    custom:
-      source: upper_controller_client.py
+    path: upper_controller_client.py
     inputs:
       arm_command: arm_command
     outputs:
       - arm_status
 
   - id: workflow_orchestrator
-    custom:
-      source: workflow_orchestrator.py
+    path: workflow_orchestrator.py
     inputs:
       chassis_status: chassis_status
       arm_status: arm_status
