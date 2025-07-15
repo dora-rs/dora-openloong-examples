@@ -1,7 +1,9 @@
 import grpc
 from concurrent import futures
 import time
-
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import proto.upper_controller_pb2 as upper_controller_pb2
 import proto.upper_controller_pb2_grpc as upper_controller_pb2_grpc
 from google.protobuf import empty_pb2

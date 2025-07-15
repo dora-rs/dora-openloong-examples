@@ -1,6 +1,9 @@
 import grpc
 from concurrent import futures
 import time
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import proto.chassis_controller_pb2 as chassis_controller_pb2
 import proto.chassis_controller_pb2_grpc as chassis_controller_pb2_grpc

@@ -42,3 +42,37 @@
     Location:
         libraries/core/src/descriptor/mod.rs:129:38
 ```
+#### 7月15日: 单独测试dataflow中每个节点功能
+ - 将dataflow.yml中每个节点单独测试, 排查节点功能完整性
+ - 配置dora python调试功能
+   pip安装python调试用软件包
+   ```
+    pip install --upgrade debugpy
+   ```
+   在ide中添加json配置
+   ```
+    {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+        "name": "Python Debugger: Remote Attach",
+        "type": "debugpy",
+        "request": "attach",
+        "connect": {
+            "host": "localhost",
+            "port": 5678
+        },
+        "pathMappings": [
+            {
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "."
+            }
+        ]
+        }
+    ]
+    }
+   ```
+   

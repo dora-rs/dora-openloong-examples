@@ -55,14 +55,14 @@ nodes:
       - result
 
   # 日志记录节点 - 记录工作流执行日志
-  - id: logger
-    path: ./logger_node.py
-    inputs:
-      workflow_started: workflow_coordinator/workflow_started
-      task_completed: status_monitor/task_completed
-      task_failed: status_monitor/task_failed
-      step_completed: workflow_coordinator/step_completed
-      step_failed: workflow_coordinator/step_failed
-      result: workflow_coordinator/result
-    outputs:
-      - log 
+  # - id: logger
+  #   path: ./logger_node.py
+  #   inputs:
+  #     workflow_started: workflow_coordinator/workflow_started
+  #     task_completed: status_monitor/task_completed
+  #     task_failed: status_monitor/task_failed
+  #     step_completed: workflow_coordinator/step_completed
+  #     step_failed: workflow_coordinator/step_failed
+  #     result: workflow_coordinator/result
+  #   outputs:
+  #     - log 

@@ -1,14 +1,11 @@
 from dora import Node
 
-class StartTriggerNode(Node):
-    def __init__(self):
-        super().__init__()
-        self.triggered = False
-
-    def on_event(self, event):
-        if not self.triggered:
-            self.send_output("start_trigger", b"start")
-            self.triggered = True
+def main():
+    node = Node()
+    print("🤖 机器人工作流触发节点启动")
+    for event in node:
+        node.send_output("trigger")
+        break  # 只触发一次，触发后退出
 
 if __name__ == "__main__":
-    StartTriggerNode().run()
+    main()
