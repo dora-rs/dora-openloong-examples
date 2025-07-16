@@ -9,16 +9,34 @@ def main():
         if event["type"] == "INPUT":
             if event["id"] == "chassis_status":
                 status = event["value"]
-                if isinstance(status, bytes):
+                # 兼容 pyarrow.lib.UInt8Array、bytes、str
+                if type(status).__name__ == "UInt8Array":
+                    status = status.to_numpy().tobytes().decode("utf-8")
+                elif hasattr(status, "tobytes"):
+                    status = status.tobytes().decode("utf-8")
+                elif isinstance(status, bytes):
                     status = status.decode("utf-8")
+                elif isinstance(status, str):
+                    pass
+                else:
+                    raise TypeError(f"未知类型: {type(status)}")
                 status = json.loads(status)
                 print(f"收到底盘状态: {status}")
                 if status.get("action") == "MOVE_COMPLETE":
                     node.send_output("next_action", json.dumps({"action": "MOVE_COMPLETE"}).encode())
             elif event["id"] == "arm_status":
                 status = event["value"]
-                if isinstance(status, bytes):
+                # 兼容 pyarrow.lib.UInt8Array、bytes、str
+                if type(status).__name__ == "UInt8Array":
+                    status = status.to_numpy().tobytes().decode("utf-8")
+                elif hasattr(status, "tobytes"):
+                    status = status.tobytes().decode("utf-8")
+                elif isinstance(status, bytes):
                     status = status.decode("utf-8")
+                elif isinstance(status, str):
+                    pass
+                else:
+                    raise TypeError(f"未知类型: {type(status)}")
                 status = json.loads(status)
                 print(f"收到机械臂状态: {status}")
                 if status.get("action") == "GRAB_COMPLETE":

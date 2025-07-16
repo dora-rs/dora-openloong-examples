@@ -78,4 +78,10 @@
 #### 7月16日: 单独测试dataflow中每个节点功能
    - 整理openloong-dora分支的文件夹, 删除无关文件的跟踪
    - 将openloong-dora分支合并到main分支
+   - 启动dora节点时遇到输入流关闭问题:
+   ```
+    事件触发: {'id': 'trigger', 'kind': 'dora', 'type': 'INPUT_CLOSED'}
+   ```
+   处理方式: 将trigger节点先设为保持不退出的状态, 可暂时解决输入流"INPUT_CLOSED"问题, 后续可以用订阅其他节点正常工作的信号后退出triiger节点来处理
+   
    

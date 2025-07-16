@@ -16,6 +16,7 @@ def check_condition(node):
     if condition_met:
         print("✅ 条件满足，准备抓取")
         node.send_output("workflow_status", json.dumps({"status": "CONDITION_MET"}).encode())
+        send_grab_command(node)  # 直接进入抓取流程
     else:
         print("❌ 条件不满足")
         node.send_output("workflow_status", json.dumps({"status": "CONDITION_NOT_MET"}).encode())
@@ -51,6 +52,7 @@ def main():
     print("🤖 机器人工作流run节点启动")
     workflow_state = "INIT"
     for event in node:
+        print("事件触发:", event)
         if event["type"] == "INPUT":
             if event["id"] == "trigger":
                 print("🚀 机器人工作流启动")
@@ -58,8 +60,17 @@ def main():
                 send_chassis_command(node)
             elif event["id"] == "next_action":
                 action_data = event["value"]
-                if isinstance(action_data, bytes):
-                    action_data = action_data.decode('utf-8')
+                # 兼容 pyarrow.lib.UInt8Array、bytes、str
+                if type(action_data).__name__ == "UInt8Array":
+                    action_data = action_data.to_numpy().tobytes().decode("utf-8")
+                elif hasattr(action_data, "tobytes"):
+                    action_data = action_data.tobytes().decode("utf-8")
+                elif isinstance(action_data, bytes):
+                    action_data = action_data.decode("utf-8")
+                elif isinstance(action_data, str):
+                    pass
+                else:
+                    raise TypeError(f"未知类型: {type(action_data)}")
                 action = json.loads(action_data)
                 print(f"📋 收到下一步动作: {action}")
                 if action.get("action") == "MOVE_COMPLETE":
