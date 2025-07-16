@@ -1,5 +1,12 @@
 .idea/
 .vscode/
 gps_navigation_grpc/__pycache__
-Doc/.DS_Store
+upper_controller/__pycache__
 .DS_Store
+Doc/.DS_Store
+Openloong-nav-warpper/.DS_Store
+Openloong-proto/.DS_Store
+openloong-dora-workflow/proto/*
+.idea/*
+/openloong-dora-workflow/out/
+/openloong-dora-workflow/tests/out/
