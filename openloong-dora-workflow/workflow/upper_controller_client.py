@@ -3,7 +3,7 @@ from dora import Node
 
 def main():
     node = Node()
-    print("🤖 上位机控制节点启动")
+    print("上位机控制节点启动")
     for event in node:
         if event["type"] == "INPUT" and event["id"] == "arm_command":
             print("收到机械臂命令: ", event)

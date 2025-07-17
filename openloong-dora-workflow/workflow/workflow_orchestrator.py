@@ -3,7 +3,7 @@ from dora import Node
 
 def main():
     node = Node()
-    print("🧩 工作流编排节点启动")
+    print("工作流编排节点启动")
     state = "WAIT_MOVE"
     for event in node:
         if event["type"] == "INPUT":

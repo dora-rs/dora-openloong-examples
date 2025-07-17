@@ -3,7 +3,7 @@ from dora import Node
 
 def main():
     node = Node()
-    print("🚗 底盘控制节点启动")
+    print("底盘控制节点启动")
     for event in node:
         if event["type"] == "INPUT" and event["id"] == "chassis_command":
             print("收到底盘命令: ", event)

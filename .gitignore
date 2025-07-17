@@ -8,5 +8,4 @@ Openloong-nav-warpper/.DS_Store
 Openloong-proto/.DS_Store
 openloong-dora-workflow/proto/*
 .idea/*
-/openloong-dora-workflow/out/
-/openloong-dora-workflow/tests/out/
+/openloong-dora-workflow/workflow/out/
