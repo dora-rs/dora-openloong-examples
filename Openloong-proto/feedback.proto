@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package feedback;
+
+import "google/protobuf/empty.proto";
+
+message JointState {
+    int32 status_word = 1;
+    int32 error_code = 2;
+    float temperature = 3;
+    int32 enabled = 4;
+}
+
+message JointPVT {
+    float q = 1;
+    float q_exp = 2;
+    float qd = 3;
+    float qd_exp = 4;
+    float tau = 5;
+    float tau_exp = 6;
+}
+
+message LimbState {
+    repeated JointState joints = 1;
+}
+
+message LimbPVT {
+    repeated JointPVT joints = 1;
+}
+
+message DriverState {
+    repeated LimbState limbs = 1;
+}
+
+message DriverPVT {
+    repeated LimbPVT limbs = 1;
+}
+
+message State {
+    float battery_level = 1;
+    float ram_occupancy = 2;
+    repeated float cpu_occupancy = 3;
+}
+
+message CameraName {
+    string value = 1;
+}
+
+message CameraFrame {
+    bytes value = 1;
+}
+
+service Feedback {
+    rpc getCameraFrame(CameraName) returns (CameraFrame);
+    rpc getCameraStream(CameraName) returns (stream CameraFrame);
+    rpc getDriverPVT(google.protobuf.Empty) returns (DriverPVT);
+    rpc getDriverState(google.protobuf.Empty) returns (DriverState);
+    rpc getBatteryState(google.protobuf.Empty) returns (BatteryState);
+}

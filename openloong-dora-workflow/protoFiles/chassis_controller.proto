@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package chassis_controller;
+
+message Descartes {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+message Command {
+    Descartes linear = 1; // linear.x = vx, linear.y = vy
+    Descartes angular = 2; // angular.z = wz
+    int32 tap = 3;
+    float zOff = 4;
+}
+
+message Response {
+    bool succeeded = 1;
+    string msg = 2;
+}
+
+service ChassisControler {
+    rpc sendCommand(Command) returns (Response);
+}

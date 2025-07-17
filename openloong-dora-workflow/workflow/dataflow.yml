@@ -1,0 +1,37 @@
+nodes:
+  - id: start_trigger
+    path: ./start_workflow.py
+    outputs:
+      - trigger
+
+  - id: robot_workflow
+    path: ./robot_workflow.py
+    inputs:
+      trigger: start_trigger/trigger
+      next_action: workflow_orchestrator/next_action
+    outputs:
+      - chassis_command
+      - arm_command
+      - workflow_status
+
+  - id: chassis_controller
+    path: ./chassis_controller_client.py
+    inputs:
+      chassis_command: robot_workflow/chassis_command
+    outputs:
+      - chassis_status
+
+  - id: upper_controller
+    path: ./upper_controller_client.py
+    inputs:
+      arm_command: robot_workflow/arm_command
+    outputs:
+      - arm_status
+
+  - id: workflow_orchestrator
+    path: ./workflow_orchestrator.py
+    inputs:
+      chassis_status: chassis_controller/chassis_status
+      arm_status: upper_controller/arm_status
+    outputs:
+      - next_action

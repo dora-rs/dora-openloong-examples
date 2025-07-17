@@ -1,0 +1,51 @@
+# 全局代价地图配置
+global_costmap:
+  global_frame: map  
+  robot_base_frame: body_foot  
+  static_map: true  
+  update_frequency: 1.0  
+  publish_frequency: 1.0  
+  transform_tolerance: 10.0  
+
+  plugins:  # ➔ ★★ 补充的关键点 ★★
+    - {name: static_layer,    type: "costmap_2d::StaticLayer"}
+    - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+
+  static_layer:  # ➔ 配置静态地图层
+    enabled: true
+    map_topic: "/map"
+
+  obstacle_layer:  # ➔ 配置障碍物层
+    enabled: true
+    obstacle_range: 2.5
+    raytrace_range: 3.0
+    observation_sources: scan
+    scan: 
+      data_type: LaserScan
+      topic: scan
+      marking: true
+      clearing: true
+
+  inflation_layer:  # ➔ 配置膨胀层
+    enabled: true
+    inflation_radius: 0.5  # 根据机器人体积调整
+    cost_scaling_factor: 3.0  # 代价递减速度
+
+# 恢复行为配置
+recovery_behaviors:
+  - name: 'conservative_reset' 
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'rotate_recovery'  
+    type: 'rotate_recovery/RotateRecovery'
+  - name: 'aggressive_reset'  
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+conservative_reset:
+  reset_distance: 2.0
+  layer_names: ["obstacle_layer"]
+
+aggressive_reset:
+  reset_distance: 0.0
+  layer_names: ["obstacle_layer"]
+
