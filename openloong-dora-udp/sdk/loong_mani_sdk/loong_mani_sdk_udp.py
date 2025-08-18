@@ -137,7 +137,7 @@ class maniSdkClass:
 		self.sens=maniSdkSensDataClass(jntNum, fingerDofLeft, fingerDofRight)
 
 	def send(self,ctrl:maniSdkCtrlDataClass):
-		self.sk.sendto(self.packData(ctrl), self.rbtIpPort)
+		self.sk.sendto(self.packCtrlData(ctrl), self.rbtIpPort)
 	def recv(self)->maniSdkSensDataClass:
 		try:
 			buf,_=self.sk.recvfrom(2048)
@@ -145,6 +145,10 @@ class maniSdkClass:
 		except:
 			pass
 		return self.sens
+
+	def packData(self):
+		"""打包传感器数据"""
+		return self.sens.packSensData()
 
 	def unpackData(self,buf):
 		# 务必注意c++的自动内存对齐，数据连续问题
@@ -163,7 +167,7 @@ class maniSdkClass:
 		self.sens.tgtTipVW2B =self.sens.tgtTipVW2B.reshape((2,-1))
 		self.sens.tgtTipFM2B =self.sens.tgtTipFM2B.reshape((2,-1))
 
-	def packData(self, ctrl:maniSdkCtrlDataClass):
+	def packCtrlData(self, ctrl:maniSdkCtrlDataClass):
 		buf=struct.pack('6h', ctrl.inCharge, ctrl.filtLevel, ctrl.armMode,
 								ctrl.fingerMode, ctrl.neckMode, ctrl.lumbarMode)
 		buf+=ctrl.armCmd.astype(dtype=np.float32).tobytes()
@@ -175,5 +179,38 @@ class maniSdkClass:
 		# if(len(buf)!=184):
 		# 	print("maniSdk cmd数据udp打包大小不匹配！",len(buf))
 		# 	exit()
+		return buf
+
+	def packSensData(self):
+		"""打包传感器数据"""
+		buf = b""
+		buf += struct.pack('i', self.size.item())
+		buf += struct.pack('d', self.timestamp.item())
+		buf += self.key.astype(np.int16).tobytes()
+		buf += self.planName.encode('utf-8')[:16].ljust(16, b'\x00')
+		buf += self.state.astype(np.int16).tobytes()
+		buf += self.joy.astype(np.float32).tobytes()
+		buf += self.rpy.astype(np.float32).tobytes()
+		buf += self.gyr.astype(np.float32).tobytes()
+		buf += self.acc.astype(np.float32).tobytes()
+		buf += self.actJ.astype(np.float32).tobytes()
+		buf += self.actW.astype(np.float32).tobytes()
+		buf += self.actT.astype(np.float32).tobytes()
+		buf += self.drvTemp.astype(np.int16).tobytes()
+		buf += self.drvState.astype(np.int16).tobytes()
+		buf += self.drvErr.astype(np.int16).tobytes()
+		buf += self.tgtJ.astype(np.float32).tobytes()
+		buf += self.tgtW.astype(np.float32).tobytes()
+		buf += self.tgtT.astype(np.float32).tobytes()
+		buf += self.actFingerLeft.astype(np.float32).tobytes()
+		buf += self.actFingerRight.astype(np.float32).tobytes()
+		buf += self.tgtFingerLeft.astype(np.float32).tobytes()
+		buf += self.tgtFingerRight.astype(np.float32).tobytes()
+		buf += self.actTipPRpy2B.astype(np.float32).tobytes()
+		buf += self.actTipVW2B.astype(np.float32).tobytes()
+		buf += self.actTipFM2B.astype(np.float32).tobytes()
+		buf += self.tgtTipPRpy2B.astype(np.float32).tobytes()
+		buf += self.tgtTipVW2B.astype(np.float32).tobytes()
+		buf += self.tgtTipFM2B.astype(np.float32).tobytes()
 		return buf
 
