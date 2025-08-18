@@ -9,3 +9,4 @@ Openloong-proto/.DS_Store
 openloong-dora-workflow/proto/*
 .idea/*
 /openloong-dora-workflow/workflow/out/
+openloong-dora-udp/sdk/loong_mani_sdk/__pycache__
