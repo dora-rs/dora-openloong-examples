@@ -53,7 +53,7 @@ class LoongManiServer:
         self.sens.dataSize = np.int32(1024)
         self.sens.timestamp = np.float64(current_time)
         self.sens.key = np.array([1, 2], np.int16)
-        self.sens.planName = b"mani_plan\x00" * 2  # 16字节
+        self.sens.planName = "mani_plan"  # 字符串类型
         self.sens.state = np.array([0, 1], np.int16)
         self.sens.joy = np.array([0.1, -0.2, 0.3, -0.4], np.float32)
         
@@ -89,7 +89,7 @@ class LoongManiServer:
         self.sens.tgtTipVW2B = np.zeros((2, 6), np.float32)
         self.sens.tgtTipFM2B = np.zeros((2, 6), np.float32)
         
-        return self.sens.packData()
+        return self.sens.packSensData()
 
     def parse_control_command(self, ctrl_buf):
         """解析机械臂控制指令"""
@@ -174,7 +174,7 @@ class LoongManiServer:
                     sens = self.sdk.recv()
                     if sens.timestamp > 0:
                         print(f"接收到传感器数据，时间戳：{sens.timestamp:.2f}")
-                        sens_buf = sens.packData()
+                        sens_buf = sens.packSensData()
                     else:
                         # 如果SDK没有数据，生成模拟数据
                         sens_buf = self.generate_mani_sens_data()

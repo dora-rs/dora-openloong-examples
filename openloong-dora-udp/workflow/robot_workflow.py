@@ -11,6 +11,23 @@ def send_chassis_command(node):
     node.send_output("chassis_command", json.dumps(command).encode())
     print("发送底盘移动命令")
 
+def send_joint_command(node):
+    command = {
+        "action": "JOINT_CONTROL",
+        "state": 1,
+        "tor_limit_rate": 0.2,
+        "filt_rate": 0.05,
+        "joint_angles": [0.3, -1.3, 1.8, 0.5, 0, 0, 0,  # 左臂
+                        -0.3, -1.3, -1.8, 0.5, 0, 0, 0,  # 右臂
+                        0, 0, 0, 0, 0,  # 颈
+                        0.0533331, 0, 0.325429, -0.712646, 0.387217, -0.0533331,  # 左腿
+                        -0.0533331, 0, 0.325429, -0.712646, 0.387217, 0.0533331],  # 右腿
+        "finger_left": [0.0, 0.0, 0.0],
+        "finger_right": [0.0, 0.0, 0.0]
+    }
+    node.send_output("joint_command", json.dumps(command).encode())
+    print("发送关节控制命令")
+
 def check_condition(node):
     condition_met = True
     if condition_met:
@@ -69,6 +86,7 @@ def main():
                 print("机器人工作流启动")
                 workflow_state = "MOVE_TO_TARGET"
                 send_chassis_command(node)
+                send_joint_command(node)  # 同时发送关节控制命令
             elif event["id"] == "next_action":
                 action_data = event["value"]
                 # 兼容 pyarrow.lib.UInt8Array、bytes、str

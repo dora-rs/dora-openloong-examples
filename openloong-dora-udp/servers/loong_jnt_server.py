@@ -42,7 +42,7 @@ class LoongJntServer:
         self.sens.size = np.int32(1024)
         self.sens.timestamp = np.float64(current_time)
         self.sens.key = np.array([1, 2], np.int16)
-        self.sens.planName = b"jnt_plan\x00" * 2  # 16字节
+        self.sens.planName = "jnt_plan"  # 字符串类型
         self.sens.state = np.array([0, 1], np.int16)
         self.sens.joy = np.array([0.1, -0.2, 0.3, -0.4], np.float32)
         
