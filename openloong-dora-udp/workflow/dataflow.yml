@@ -1,0 +1,46 @@
+nodes:
+  - id: start_trigger
+    path: ./start_workflow.py
+    outputs:
+      - trigger
+
+  - id: robot_workflow
+    path: ./robot_workflow.py
+    inputs:
+      trigger: start_trigger/trigger
+      next_action: workflow_orchestrator/next_action
+    outputs:
+      - chassis_command
+      - joint_command
+      - mani_command
+      - workflow_status
+
+  - id: chassis_controller
+    path: ./chassis_controller_client.py
+    inputs:
+      chassis_command: robot_workflow/chassis_command
+    outputs:
+      - chassis_status
+
+  - id: joint_controller
+    path: ./loong_jnt_client.py
+    inputs:
+      joint_command: robot_workflow/joint_command
+    outputs:
+      - joint_status
+
+  - id: mani_controller
+    path: ./loong_mani_client.py
+    inputs:
+      mani_command: robot_workflow/mani_command
+    outputs:
+      - mani_status
+
+  - id: workflow_orchestrator
+    path: ./workflow_orchestrator.py
+    inputs:
+      chassis_status: chassis_controller/chassis_status
+      joint_status: joint_controller/joint_status
+      mani_status: mani_controller/mani_status
+    outputs:
+      - next_action

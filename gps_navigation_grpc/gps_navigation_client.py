@@ -1,6 +1,11 @@
 import grpc
-import gps_navigation_pb2
-import gps_navigation_pb2_grpc
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import proto.gps_navigation_pb2 as gps_navigation_pb2
+import proto.gps_navigation_pb2_grpc as gps_navigation_pb2_grpc
 from google.protobuf import empty_pb2
 
 def run():
