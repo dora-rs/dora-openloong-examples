@@ -1,0 +1,3 @@
+[submodule "openloong-dora-sim/loong_sim_sdk_release"]
+	path = openloong-dora-sim/loong_sim_sdk_release
+	url = https://github.com/loongOpen/loong_sim_sdk_release.git
