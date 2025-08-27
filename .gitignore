@@ -12,3 +12,4 @@ openloong-dora-workflow/proto/*
 openloong-dora-udp/sdk/loong_mani_sdk/__pycache__
 openloong-dora-udp/sdk/loong_jnt_sdk/__pycache__
 openloong-dora-udp/workflow/out
+openloong-dora-sim/workflow/out

@@ -16,21 +16,21 @@ nodes:
       - workflow_status
 
   - id: chassis_controller
-    path: ./chassis_controller_client.py
+    path: ./sim_udp_client.py
     inputs:
       chassis_command: robot_workflow/chassis_command
     outputs:
       - chassis_status
 
   - id: joint_controller
-    path: ./loong_jnt_client.py
+    path: ./sim_udp_client.py
     inputs:
       joint_command: robot_workflow/joint_command
     outputs:
       - joint_status
 
   - id: mani_controller
-    path: ./loong_mani_client.py
+    path: ./sim_udp_client.py
     inputs:
       mani_command: robot_workflow/mani_command
     outputs:
