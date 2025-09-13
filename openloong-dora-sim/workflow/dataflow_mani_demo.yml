@@ -25,13 +25,6 @@ nodes:
     outputs:
       - mani_ready
 
-  - id: mani_controller
-    path: ./mani_node.py
-    inputs:
-      mani_command: demo_ui/mani_command
-    outputs:
-      - mani_status
-
   - id: demo_ui
     path: ./demo_ui_node.py
     inputs:
@@ -39,3 +32,12 @@ nodes:
       mani_status: mani_controller/mani_status
     outputs:
       - mani_command
+
+  - id: mani_controller
+    path: ./mani_node.py
+    inputs:
+      mani_command: demo_ui/mani_command
+    outputs:
+      - mani_status
+
+

@@ -86,9 +86,18 @@ class MinimalManiNode:
 
 
 def main():
+    print("=" * 60)
+    print("🎮 MANI_CONTROLLER 节点启动中...")
+    print("=" * 60)
+    
     node = Node()
     mani = MinimalManiNode()
-    print("最简 mani 节点已启动")
+    print("✅ [mani_controller] 机械臂控制节点已启动")
+    print("📋 [mani_controller] 支持的动作: GRAB, RETURN, MANI_CONTROL")
+    print("=" * 60)
+    print("🎯 MANI_CONTROLLER 节点运行中，等待控制命令...")
+    print("=" * 60)
+    
     for event in node:
         if event["type"] != "INPUT":
             continue
@@ -96,6 +105,9 @@ def main():
         raw_value = event["value"]
         if event_id != "mani_command":
             continue
+            
+        print("📨 [mani_controller] 收到机械臂控制命令")
+        
         try:
             if type(raw_value).__name__ == "UInt8Array":
                 value = raw_value.to_numpy().tobytes().decode("utf-8")
@@ -108,19 +120,33 @@ def main():
             else:
                 raise TypeError(f"Unsupported type: {type(raw_value)}")
             cmd = json.loads(value)
-        except Exception:
+            print(f"📝 [mani_controller] 解析命令: {cmd}")
+        except Exception as e:
+            print(f"❌ [mani_controller] 命令解析失败: {e}")
             cmd = {}
 
         action = cmd.get("action")
+        print(f"🎯 [mani_controller] 执行动作: {action}")
+        
         if action == "GRAB":
+            print("🤏 [mani_controller] 开始执行抓取动作...")
             mani.handle_grab()
             node.send_output("mani_status", json.dumps({"action":"GRAB","status":"SUCCESS"}).encode())
+            print("✅ [mani_controller] 抓取动作完成!")
         elif action == "RETURN":
+            print("🔄 [mani_controller] 开始执行返回动作...")
             mani.handle_return()
             node.send_output("mani_status", json.dumps({"action":"RETURN","status":"SUCCESS"}).encode())
+            print("✅ [mani_controller] 返回动作完成!")
         elif action == "MANI_CONTROL":
+            print("🎛️ [mani_controller] 开始执行自定义控制...")
             mani.handle_custom(cmd.get("target", {}))
             node.send_output("mani_status", json.dumps({"action":"MANI_CONTROL","status":"SUCCESS"}).encode())
+            print("✅ [mani_controller] 自定义控制完成!")
+        else:
+            print(f"⚠️ [mani_controller] 未知动作: {action}")
+        
+        print("-" * 40)
 
 
 if __name__ == "__main__":
