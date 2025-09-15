@@ -1,29 +1,30 @@
 import os
 import subprocess
 import time
+import select
 from dora import Node
 
 
 def main():
-    print("=" * 60)
-    print("🤖 MANI_RUNNER 节点启动中...")
-    print("=" * 60)
+    # print("=" * 60)
+    # print("🤖 MANI_RUNNER 节点启动中...")
+    # print("=" * 60)
     
     node = Node()
     tools_dir = os.path.join(os.path.dirname(__file__), "..", "..", "loong_sim_sdk_release", "tools")
     tools_dir = os.path.abspath(tools_dir)
-    print(f"📁 [mani_runner] 工具目录: {tools_dir}")
+    # print(f"📁 [mani_runner] 工具目录: {tools_dir}")
 
-    print("🔄 [mani_runner] 正在启动机械臂控制程序...")
+    # print("🔄 [mani_runner] 正在启动机械臂控制程序...")
     # 机械臂控制程序需要在bin目录下运行
     bin_dir = os.path.join(tools_dir, "..", "bin")
     arch = "x64" if os.uname().machine == "x86_64" else "a64"
     mani_bin = os.path.join(bin_dir, f"loong_manipulation_{arch}")
-    print(f"🤖 [mani_runner] 使用二进制文件: {mani_bin}")
-    print(f"📁 [mani_runner] 工作目录: {bin_dir}")
+    # print(f"🤖 [mani_runner] 使用二进制文件: {mani_bin}")
+    # print(f"📁 [mani_runner] 工作目录: {bin_dir}")
     
     # 在正确的目录下启动机械臂控制程序
-    proc = subprocess.Popen([mani_bin], cwd=bin_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(['sudo',mani_bin], cwd=bin_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f"✅ [mani_runner] 机械臂控制程序已启动，进程ID: {proc.pid}")
 
     print("⏳ [mani_runner] 等待机械臂控制程序初始化...")
@@ -37,6 +38,12 @@ def main():
     try:
         print("🔄 [interface_runner] 保持节点运行状态...")
         while True:
+            for pipe, name in [(proc.stdout, "stdout"), (proc.stderr, "stderr")]:
+                rlist, _, _ = select.select([pipe], [], [], 0)
+                if rlist:
+                    line = pipe.readline()
+                    if line:
+                        print(f"[mani_bin {name}] {line.decode(errors='ignore').rstrip()}")
             try:
                 event = next(node)
                 if event["type"] == "INPUT":

@@ -5,23 +5,23 @@ from dora import Node
 
 
 def main():
-    print("=" * 60)
-    print("🚀 SIM_RUNNER 节点启动中...")
-    print("=" * 60)
+    # print("=" * 60)
+    # print("🚀 SIM_RUNNER 节点启动中...")
+    # print("=" * 60)
     
     node = Node()
     tools_dir = os.path.join(os.path.dirname(__file__), "..", "..", "loong_sim_sdk_release", "tools")
     tools_dir = os.path.abspath(tools_dir)
-    print(f"📁 [sim_runner] 工具目录: {tools_dir}")
+    # print(f"📁 [sim_runner] 工具目录: {tools_dir}")
 
     # Start sim
-    print("🔄 [sim_runner] 正在启动仿真器...")
+    # print("🔄 [sim_runner] 正在启动仿真器...")
     # 仿真器需要在bin目录下运行
     bin_dir = os.path.join(tools_dir, "..", "bin")
     arch = "x64" if os.uname().machine == "x86_64" else "a64"
     sim_bin = os.path.join(bin_dir, f"loong_share_sim_{arch}")
-    print(f"🚀 [sim_runner] 使用二进制文件: {sim_bin}")
-    print(f"📁 [sim_runner] 工作目录: {bin_dir}")
+    # print(f"🚀 [sim_runner] 使用二进制文件: {sim_bin}")
+    # print(f"📁 [sim_runner] 工作目录: {bin_dir}")
     
     # 在正确的目录下启动仿真器，设置DISPLAY环境变量
     env = os.environ.copy()
@@ -30,17 +30,17 @@ def main():
     print(f"✅ [sim_runner] 仿真器已启动，进程ID: {proc.pid}")
 
     # Give it a moment to boot
-    print("⏳ [sim_runner] 等待仿真器初始化...")
+    # print("⏳ [sim_runner] 等待仿真器初始化...")
     time.sleep(1.0)
 
     node.send_output("sim_ready", b"1")
-    print("🎯 [sim_runner] 仿真器就绪信号已发送!")
-    print("=" * 60)
-    print("✅ SIM_RUNNER 节点运行中，等待其他节点...")
-    print("=" * 60)
+    # print("🎯 [sim_runner] 仿真器就绪信号已发送!")
+    # print("=" * 60)
+    # print("✅ SIM_RUNNER 节点运行中，等待其他节点...")
+    # print("=" * 60)
 
     # Keep node alive
-    print("🔄 [sim_runner] 保持节点运行状态...")
+    # print("🔄 [sim_runner] 保持节点运行状态...")
     try:
         for event in node:
             # 处理任何输入事件（如果有的话）

@@ -1,29 +1,30 @@
 import os
 import subprocess
 import time
+import select
 from dora import Node
 
 
 def main():
-    print("=" * 60)
-    print("🔌 INTERFACE_RUNNER 节点启动中...")
-    print("=" * 60)
+    # print("=" * 60)
+    # print("🔌 INTERFACE_RUNNER 节点启动中...")
+    # print("=" * 60)
     
     node = Node()
     tools_dir = os.path.join(os.path.dirname(__file__), "..", "..", "loong_sim_sdk_release", "tools")
     tools_dir = os.path.abspath(tools_dir)
-    print(f"📁 [interface_runner] 工具目录: {tools_dir}")
+    # print(f"📁 [interface_runner] 工具目录: {tools_dir}")
 
-    print("🔄 [interface_runner] 正在启动接口程序...")
+    # print("🔄 [interface_runner] 正在启动接口程序...")
     # 接口程序需要在bin目录下运行
     bin_dir = os.path.join(tools_dir, "..", "bin")
     arch = "x64" if os.uname().machine == "x86_64" else "a64"
     interface_bin = os.path.join(bin_dir, f"loong_interface_{arch}")
-    print(f"🔌 [interface_runner] 使用二进制文件: {interface_bin}")
-    print(f"📁 [interface_runner] 工作目录: {bin_dir}")
+    # print(f"🔌 [interface_runner] 使用二进制文件: {interface_bin}")
+    # print(f"📁 [interface_runner] 工作目录: {bin_dir}")
     
     # 在正确的目录下启动接口程序
-    proc = subprocess.Popen([interface_bin], cwd=bin_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(['sudo',interface_bin], cwd=bin_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f"✅ [interface_runner] 接口程序已启动，进程ID: {proc.pid}")
 
     print("⏳ [interface_runner] 等待接口程序初始化...")
@@ -39,6 +40,12 @@ def main():
     try:
         print("🔄 [interface_runner] 保持节点运行状态...")
         while True:
+            for pipe, name in [(proc.stdout, "stdout"), (proc.stderr, "stderr")]:
+                rlist, _, _ = select.select([pipe], [], [], 0)
+                if rlist:
+                    line = pipe.readline()
+                    if line:
+                        print(f"[interface_bin {name}] {line.decode(errors='ignore').rstrip()}")
             try:
                 event = next(node)
                 if event["type"] == "INPUT":

@@ -1,43 +1,56 @@
 nodes:
-  - id: sim_runner
-    path: ./runners/sim_runner.py
-    outputs:
-      - sim_ready
+  # - id: sim_runner
+  #   path: ./runners/sim_runner.py
+  #   outputs:
+  #     - sim_ready
 
-  - id: driver_runner
-    path: ./runners/driver_runner.py
-    inputs:
-      sim_ready: sim_runner/sim_ready
-    outputs:
-      - driver_ready
+  # - id: driver_runner
+  #   path: ./runners/driver_runner.py
+  #   inputs:
+  #   sim_ready: sim_runner/sim_ready
+  #   outputs:
+  #     - driver_ready
 
-  - id: interface_runner
-    path: ./runners/interface_runner.py
-    inputs:
-      driver_ready: driver_runner/driver_ready
-    outputs:
-      - interface_ready
+  # - id: interface_runner
+  #   path: ./runners/interface_runner.py
+  #   inputs:
+  #     driver_ready: driver_runner/driver_ready
+  #   outputs:
+  #     - interface_ready
 
-  - id: mani_runner
-    path: ./runners/mani_runner.py
-    inputs:
-      interface_ready: interface_runner/interface_ready
-    outputs:
-      - mani_ready
+  # - id: mani_runner
+  #   path: ./runners/mani_runner.py
+  #   inputs:
+  #     interface_ready: interface_runner/interface_ready
+  #   outputs:
+  #     - mani_ready
 
-  - id: demo_ui
-    path: ./demo_ui_node.py
+  - id: cmd_node
+    path: ./runners/cmd_node.py
     inputs:
-      trigger: sim_runner/sim_ready
-      mani_status: mani_controller/mani_status
+      # interface_ready: mani_runner/mani_ready
+      test_status: test_node/test_status
     outputs:
-      - mani_command
+      - cmd_ready
+  - id: test_node
+    path: ./runners/test.py
+    inputs:
+      cmd_ready: cmd_node/cmd_ready
+    outputs:
+      - test_status
+  # - id: demo_ui
+  #   path: ./demo_ui_node.py
+  #   inputs:
+  #     trigger: sim_runner/sim_ready
+  #     mani_status: mani_controller/mani_status
+  #   outputs:
+  #     - mani_command
 
-  - id: mani_controller
-    path: ./mani_node.py
-    inputs:
-      mani_command: demo_ui/mani_command
-    outputs:
-      - mani_status
+  # - id: mani_controller
+  #   path: ./mani_node.py
+  #   inputs:
+  #     mani_command: demo_ui/mani_command
+  #   outputs:
+  #     - mani_status
 
 
