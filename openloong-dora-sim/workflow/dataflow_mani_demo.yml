@@ -25,8 +25,8 @@ nodes:
   #   outputs:
   #     - mani_ready
 
-  - id: cmd_node
-    path: ./runners/cmd_node.py
+  - id: en_node
+    path: ./runners/en_node.py
     inputs:
       # interface_ready: mani_runner/mani_ready
       test_status: test_node/test_status
@@ -35,7 +35,7 @@ nodes:
   - id: test_node
     path: ./runners/test.py
     inputs:
-      cmd_ready: cmd_node/cmd_ready
+      cmd_ready: en_node/cmd_ready
     outputs:
       - test_status
   # - id: demo_ui
