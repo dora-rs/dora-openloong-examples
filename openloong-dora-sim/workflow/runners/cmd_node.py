@@ -28,9 +28,19 @@ def cmd_loop(sock):
         sock.sendto(cmd, (UDP_IP, UDP_PORT))
         time.sleep(0.5)
 
+def update_cmd():
+    """更新 cmd 中的浮点数字段"""
+    # global cmd
+    # 清零速度值
+    vx, vy, wz = 0, 0, 0
+    cmd[7:11] = struct.pack('<f', vy*100)
+    cmd[11:15] = struct.pack('<f', -wz*100)
+    cmd[15:19] = struct.pack('<f', -vx*100)
+
 def set_cmd(key, desc=""):
     """修改 cmd[84] 的值并打印提示"""
     global cmd
+    # update_cmd()  # 先更新浮点数字段
     cmd[84] = key
     print(f"已设置指令: [{key}] {desc}")
 
@@ -55,12 +65,12 @@ def main():
         # 1. 使能
         print("📤 发送使能指令 [1]")
         set_cmd(1, "使能 [en]")
-        time.sleep(2)  # 等待使能完成
+        time.sleep(10)  # 等待使能完成
         
         # 2. 复位
         print("📤 发送复位指令 [114]")
         set_cmd(114, "复位 [rc]")
-        time.sleep(3)  # 等待复位完成
+        time.sleep(10)  # 等待复位完成
         
         # 3. 外部操作
         # print("📤 发送外部操作指令 [116]")
