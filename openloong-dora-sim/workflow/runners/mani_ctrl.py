@@ -73,7 +73,7 @@ def main():
                         print("[test-node] 收到 cmd_ready 信号，开始执行控制...")
                         ctrl, sdk = init_ctrl()
                         started = True
-                        node.send_output("test_status", b"ready")
+                        node.send_output("ctrl_status", b"ready")
                         print("🟢 控制已初始化，即将开始循环...")
             except StopIteration:
                 pass  # 无新事件

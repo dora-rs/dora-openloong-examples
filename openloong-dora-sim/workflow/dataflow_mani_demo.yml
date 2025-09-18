@@ -29,28 +29,15 @@ nodes:
     path: ./runners/en_node.py
     inputs:
       # interface_ready: mani_runner/mani_ready
-      test_status: ctrl_node/test_status
+      ctrl_status: ctrl_node/ctrl_status
     outputs:
       - cmd_ready
   - id: ctrl_node
-    path: ./runners/test.py
+    path: ./runners/mani_ctrl.py
     inputs:
       cmd_ready: en_node/cmd_ready
     outputs:
-      - test_status
-  # - id: demo_ui
-  #   path: ./demo_ui_node.py
-  #   inputs:
-  #     trigger: sim_runner/sim_ready
-  #     mani_status: mani_controller/mani_status
-  #   outputs:
-  #     - mani_command
+      - ctrl_status
 
-  # - id: mani_controller
-  #   path: ./mani_node.py
-  #   inputs:
-  #     mani_command: demo_ui/mani_command
-  #   outputs:
-  #     - mani_status
 
 

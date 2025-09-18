@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # coding=utf-8
-"""
-test_node.py
-OpenLoong 仿真器 mani 控制节点（dora 版）
-Author: Qwen
-"""
 import time
 import sys
 import os

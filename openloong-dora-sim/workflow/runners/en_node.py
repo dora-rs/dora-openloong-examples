@@ -116,7 +116,7 @@ def main():
         while True:
             try:
                 event = next(node)
-                if event["type"] == "INPUT" and event["id"] == "test_status":
+                if event["type"] == "INPUT" and event["id"] == "ctrl_status":
                     if not test_ready:
                         print("📨 收到 test_node 就绪信号")
                         test_ready = True
