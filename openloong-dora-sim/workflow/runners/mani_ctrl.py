@@ -10,7 +10,7 @@ import numpy as np
 MAX_STEPS = 2000        # 最大控制步数，设为 None 表示无限运行
 CONTROL_FREQ = 50       # 控制频率 (Hz)
 dT = 1.0 / CONTROL_FREQ # 控制周期 (s)
-PRINT_EVERY_N_STEPS = 100  # 每 N 步打印一次状态
+PRINT_EVERY_N_STEPS = 10  # 每 N 步打印一次状态
 RECV_TIMEOUT_SEC = 0.1     # recv 超时时间（需 SDK 支持）
 # ===========================================
 
@@ -29,7 +29,7 @@ def init_ctrl():
     lumbarDof = 3
 
     ctrl = maniSdkCtrlDataClass(armDof, fingerDofLeft, fingerDofRight, neckDof, lumbarDof)
-    sdk = maniSdkClass("0.0.0.0", 8003, jntNum, fingerDofLeft, fingerDofRight)
+    sdk = maniSdkClass("127.0.0.1", 8003, jntNum, fingerDofLeft, fingerDofRight)
 
     ctrl.inCharge = 1
     ctrl.filtLevel = 1
@@ -88,6 +88,7 @@ def main():
 
                 try:
                     # --- 更新控制指令 ---
+                    print("updating control commands...")
                     t = i * dT
                     ctrl.armCmd[0][0] = 0.4 + 0.1 * np.sin(t * 2)
                     ctrl.armCmd[0][2] = 0.1 + 0.1 * np.sin(t * 2)
@@ -102,9 +103,11 @@ def main():
                     sens = None
                     try:
                         start_recv = time.time()
+                        print("time: {}".format(start_recv))
                         sens = sdk.recv()
                         if sens is not None:
                             if i % PRINT_EVERY_N_STEPS == 0:
+                                print("recv from sdk:")
                                 sens.print()  # 定期打印状态
                         else:
                             print(f"⚠️  step {i}: recv() 返回 None")
@@ -115,6 +118,7 @@ def main():
                     # --- 稳定控制周期 ---
                     end_t = time.time()
                     elapsed = end_t - start_recv if 'start_recv' in locals() else end_t - time.time() + dT
+                    print("elapsed time: {:.3f}s".format(elapsed))
                     sleep_time = dT - elapsed
                     if sleep_time > 0:
                         time.sleep(sleep_time)

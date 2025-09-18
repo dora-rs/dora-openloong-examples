@@ -41,7 +41,7 @@ def cmd_loop():
         try:
             sock.sendto(cmd, (UDP_IP, UDP_PORT))
             # 🔍 调试：打印当前发送的 key 值
-            print(f"📤 发送指令: key={cmd[84]}")
+            # print(f"📤 发送指令: key={cmd[84]}")
             time.sleep(0.5)  # 每 500ms 发送一次（与遥控器频率一致）
         except Exception as e:
             print(f"❌ UDP 发送失败: {e}")

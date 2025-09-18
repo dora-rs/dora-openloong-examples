@@ -29,10 +29,10 @@ nodes:
     path: ./runners/en_node.py
     inputs:
       # interface_ready: mani_runner/mani_ready
-      test_status: test_node/test_status
+      test_status: ctrl_node/test_status
     outputs:
       - cmd_ready
-  - id: test_node
+  - id: ctrl_node
     path: ./runners/test.py
     inputs:
       cmd_ready: en_node/cmd_ready
