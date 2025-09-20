@@ -1,0 +1,36 @@
+# JNT + MANI 完整工作流配置
+# 先运行 JNT 控制 10 秒，然后启动 MANI 控制
+
+nodes:
+  # 1. JNT 控制节点 - 负责全身关节控制
+  - id: jnt_node
+    path: sim_runners/jnt_node.py
+    inputs:
+      jnt_ctrl_status: jnt_ctrl/jnt_ctrl_status
+    outputs:
+      - jnt_cmd_ready
+      - mani_cmd_ready
+
+  # 2. JNT 控制器 - 执行具体的关节控制逻辑
+  - id: jnt_ctrl
+    path: sim_runners/jnt_ctrl.py
+    inputs:
+      jnt_cmd_ready: jnt_node/jnt_cmd_ready
+    outputs:
+      - jnt_ctrl_status
+
+  # 3. MANI 控制节点 - 负责上肢控制
+  - id: mani_node
+    path: sim_runners/mani_node.py
+    inputs:
+      ctrl_status: mani_ctrl/ctrl_status
+    outputs:
+      - cmd_ready
+
+  # 4. MANI 控制器 - 执行具体的上肢控制逻辑
+  - id: mani_ctrl
+    path: sim_runners/mani_ctrl.py
+    inputs:
+      cmd_ready: mani_node/cmd_ready
+    outputs:
+      - ctrl_status
