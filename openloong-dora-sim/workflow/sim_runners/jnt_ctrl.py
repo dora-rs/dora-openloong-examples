@@ -13,10 +13,10 @@ from sdk.loong_jnt_sdk.loong_jnt_sdk_udp import jntSdkClass
 
 # 配置参数
 dT = 0.02  # 50Hz 控制频率
-MAX_STEPS = 500  # 10秒 * 50Hz = 500步
+MAX_STEPS = 1000  # 10秒 * 50Hz = 1000步
 
 def main():
-    print("🤖 JNT_CTRL 节点启动...")
+    print("JNT_CTRL 节点启动...")
     
     node = Node()
     
@@ -83,7 +83,7 @@ def main():
         sens = sdk.recv()
         if sens is not None and i % 10 == 0:
             delayT = time.time() - sens.timestamp
-            print(f"📊 JNT 步骤 {i}: 延迟 {float(delayT):.3f}s")
+            print(f"JNT 步骤 {i}: 延迟 {float(delayT):.3f}s")
         
         # 时间控制 - 完全采用 mani_ctrl 和 test_jnt 的精确方式
         tim += dT

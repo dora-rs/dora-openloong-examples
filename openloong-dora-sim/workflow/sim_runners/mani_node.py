@@ -35,20 +35,20 @@ def cmd_loop():
     global running, cmd
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
-    print(f"🟢 UDP 发送线程启动，目标: {UDP_IP}:{UDP_PORT}")
+    print(f"UDP 发送线程启动，目标: {UDP_IP}:{UDP_PORT}")
     
     while running:
         try:
             sock.sendto(cmd, (UDP_IP, UDP_PORT))
-            # 🔍 调试：打印当前发送的 key 值
-            # print(f"📤 发送指令: key={cmd[84]}")
+            # 调试：打印当前发送的 key 值
+            # print(f"发送指令: key={cmd[84]}")
             time.sleep(0.5)  # 每 500ms 发送一次（与遥控器频率一致）
         except Exception as e:
-            print(f"❌ UDP 发送失败: {e}")
+            print(f"UDP 发送失败: {e}")
             time.sleep(1)
     
     sock.close()
-    print("🛑 UDP 发送线程已停止")
+    print("UDP 发送线程已停止")
 
 # -----------------------------
 # 设置指令函数
@@ -67,7 +67,7 @@ def set_cmd(key, desc=""):
             cmd[15:19] = packed  # -vx
 
     cmd[84] = key  # 设置指令码
-    print(f"✅ 已设置指令: [{key}] {desc}")
+    print(f"已设置指令: [{key}] {desc}")
 
 # -----------------------------
 # 主函数
@@ -78,9 +78,9 @@ def main():
     # 创建 dora 节点
     node = Node()
 
-    print("🚀 启动 OpenLoong 控制节点...")
+    print("启动 OpenLoong 控制节点...")
 
-    # ✅ 初始化标志变量
+    # 初始化标志变量
     test_ready = False
     start_time = None
 
@@ -90,60 +90,60 @@ def main():
 
     try:
         # --- 正确的使能流程 ---
-        print("\n🔧 准备使能...")
+        print("\n准备使能...")
         set_cmd(13, "下使能 [dis]")
         time.sleep(2)
 
-        print("\n🔑 发送上使能指令...")
+        print("\n发送上使能指令...")
         set_cmd(1, "上使能 [en]")
         time.sleep(2)
 
-        print("\n🔄 发送复位指令...")
+        print("\n发送复位指令...")
         set_cmd(114, "复位 [rc]")
         time.sleep(5)
 
-        print("\n🎉 机器人已成功使能并复位！")
-        print("💡 现在可以开始发送其他控制指令。")
+        print("\n机器人已成功使能并复位！")
+        print("现在可以开始发送其他控制指令。")
 
-        print("📤 发送外部操作指令 [116]")
+        print("发送外部操作指令 [116]")
         set_cmd(116, "外部操作 [mani]")
         time.sleep(2)
 
         # 发送 cmd_ready 信号通知 test_node
         node.send_output("cmd_ready", b"1")
-        print("📤 已发送 cmd_ready 信号，等待 test_node 就绪...")
+        print("已发送 cmd_ready 信号，等待 test_node 就绪...")
 
         while True:
             try:
                 event = next(node)
                 if event["type"] == "INPUT" and event["id"] == "ctrl_status":
                     if not test_ready:
-                        print("📨 收到 test_node 就绪信号")
+                        print("收到 test_node 就绪信号")
                         test_ready = True
-                        print("📤 发送开始响应指令 [152]")
+                        print("发送开始响应指令 [152]")
                         set_cmd(152, "上肢运动开始")
                         start_time = time.time()
 
                 if test_ready and start_time is not None:
                     elapsed = time.time() - start_time
                     if elapsed >= 60.0:
-                        print(f"⏱️ 已运行 {elapsed:.1f} 秒，发送停止指令 [151]")
+                        print(f"已运行 {elapsed:.1f} 秒，发送停止指令 [151]")
                         set_cmd(151, "上肢运动停止")
                         start_time = None
                     elif int(elapsed) > int(elapsed - 1):
-                        print(f"⏱️ 运行时间: {elapsed:.1f} 秒")
+                        print(f"运行时间: {elapsed:.1f} 秒")
 
             except StopIteration:
                 time.sleep(0.1)
 
     except KeyboardInterrupt:
-        print("\n👋 收到中断信号，正在关闭...")
+        print("\n收到中断信号，正在关闭...")
     except Exception as e:
-        print(f"❌ 主循环发生异常: {e}")
+        print(f"主循环发生异常: {e}")
     finally:
         running = False
         thread.join(timeout=2)
-        print("🧹 资源已清理，节点退出。")
+        print("资源已清理，节点退出。")
 
 if __name__ == "__main__":
     main()

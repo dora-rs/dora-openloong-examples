@@ -12,10 +12,10 @@ from sdk.loong_mani_sdk.loong_mani_sdk_udp import maniSdkCtrlDataClass, maniSdkC
 
 # 配置参数
 dT = 0.02  # 50Hz 控制频率
-MAX_STEPS = 2000
+MAX_STEPS = 1000
 
 def main():
-    print("🤖 MANI_CTRL 节点启动...")
+    print("MANI_CTRL 节点启动...")
     
     node = Node()
     

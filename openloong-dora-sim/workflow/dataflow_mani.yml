@@ -27,22 +27,8 @@ nodes:
   - id: ctrl_node
     path: ./sim_runners/mani_ctrl.py
     inputs:
-      cmd_ready: en_node/cmd_ready
+      cmd_ready: mani_node/cmd_ready
     outputs:
       - ctrl_status
-
-  - id: jnt_node
-    path: ./sim_runners/jnt_node.py
-    inputs:
-      cmd_ready: en_node/cmd_ready
-    outputs:
-      - jnt_status
-  
-  - id: jnt_node
-    path: ./sim_runners/jnt_node.py
-    inputs:
-      cmd_ready: en_node/cmd_ready
-    outputs:
-      - jnt_status
 
 
