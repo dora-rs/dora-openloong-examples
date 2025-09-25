@@ -1,0 +1,34 @@
+nodes:
+  # - id: sim_runner
+  #   path: ./sim_runners/sim_runner.py
+  #   outputs:
+  #     - sim_ready
+
+  # - id: driver_runner
+  #   path: ./sim_runners/driver_runner.py
+  #   inputs:
+  #   sim_ready: sim_runner/sim_ready
+  #   outputs:
+  #     - driver_ready
+
+  # - id: interface_runner
+  #   path: ./sim_runners/interface_runner.py
+  #   inputs:
+  #     driver_ready: driver_runner/driver_ready
+  #   outputs:
+  #     - interface_ready
+
+  - id: mani_node
+    path: ./sim_runners/mani_node.py
+    inputs:
+      ctrl_status: ctrl_node/ctrl_status
+    outputs:
+      - cmd_ready
+  - id: ctrl_node
+    path: ./sim_runners/mani_ctrl.py
+    inputs:
+      cmd_ready: mani_node/cmd_ready
+    outputs:
+      - ctrl_status
+
+

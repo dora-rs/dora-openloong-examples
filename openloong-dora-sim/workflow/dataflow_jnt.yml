@@ -1,0 +1,16 @@
+# 简化的 JNT 工作流配置
+nodes:
+  - id: jnt_node
+    path: sim_runners/jnt_node.py
+    inputs:
+      jnt_ctrl_status: jnt_ctrl/jnt_ctrl_status
+    outputs:
+      - jnt_cmd_ready
+      - mani_cmd_ready
+
+  - id: jnt_ctrl
+    path: sim_runners/jnt_ctrl.py
+    inputs:
+      jnt_cmd_ready: jnt_node/jnt_cmd_ready
+    outputs:
+      - jnt_ctrl_status
